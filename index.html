@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura Home | Modern Living Spaces</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&display=swap');
+
+        :root {
+            --primary: #1a1a1a;
+            --accent: #c5a68d;
+            --bg-light: #f9f7f5;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--primary);
+            overflow-x: hidden;
+        }
+
+        /* Smooth Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Modern Collage Layout */
+        .collage-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .collage-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            transition: transform 0.5s ease;
+            background-color: #e5e7eb; /* Placeholder color */
+        }
+
+        .collage-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 2;
+            transition: background 0.5s ease;
+        }
+
+        .collage-item:hover::before {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .collage-overlay-text {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 3;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #c5a68d;
+            font-weight: 700;
+            font-size: 14px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.5s ease;
+        }
+
+        .collage-item:hover .collage-overlay-text {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-5px);
+        }
+
+        /* Staggered effect for desktop */
+        @media (min-width: 768px) {
+            .collage-item:nth-child(even) {
+                transform: translateY(3rem);
+            }
+            .collage-item:nth-child(5) {
+                grid-column: span 2;
+                height: 300px !important;
+                transform: translateY(1.5rem);
+            }
+        }
+
+        .collage-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: scale 0.6s ease;
+        }
+
+        .collage-item:hover img {
+            scale: 1.05;
+        }
+
+        /* Mobile Menu Overlay */
+        #mobile-menu {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-link::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width .3s;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .glass-header {
+            background: rgba(249, 247, 245, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Animated Background Gradient */
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('bg.jpg') center/cover no-repeat fixed;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(249, 247, 245, 0.7);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(2deg);
+            }
+        }
+
+        @keyframes floatReverse {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(20px) rotate(-2deg);
+            }
+        }
+
+        /* Glow Animation */
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(197, 166, 141, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(197, 166, 141, 0.6);
+            }
+        }
+
+        /* Pulse Animation */
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        /* Slide In Animation */
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Apply floating animation to hero section */
+        #home {
+            animation: slideInUp 1s ease-out;
+        }
+
+        #home .lg\:w-1\/2:first-child {
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        #home .lg\:w-1\/2:last-child {
+            animation: slideInUp 0.8s ease-out 0.2s both;
+        }
+
+        /* Collage items with staggered animation */
+        .collage-item {
+            animation: slideInUp 0.6s ease-out backwards;
+        }
+
+        .collage-item:nth-child(1) { animation-delay: 0.1s; }
+        .collage-item:nth-child(2) { animation-delay: 0.2s; }
+        .collage-item:nth-child(3) { animation-delay: 0.3s; }
+        .collage-item:nth-child(4) { animation-delay: 0.4s; }
+        .collage-item:nth-child(5) { animation-delay: 0.5s; }
+
+        /* Glow effect on buttons */
+        button {
+            position: relative;
+        }
+
+        button:hover {
+            animation: glow 0.6s ease-in-out;
+        }
+
+        /* Enhanced hover effects */
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Floating effect for service cards */
+        .group {
+            animation: slideInUp 0.6s ease-out backwards;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .group:nth-child(1) { animation-delay: 0s; }
+        .group:nth-child(2) { animation-delay: 0.15s; }
+        .group:nth-child(3) { animation-delay: 0.3s; }
+
+        .group:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Philosophy section animations */
+        #about {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2a28 100%);
+        }
+
+        #about .reveal:first-child {
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        #about .reveal:last-child {
+            animation: slideInUp 0.8s ease-out 0.2s both;
+        }
+
+        /* Footer animation */
+        footer {
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        /* Smooth transitions for all interactive elements */
+        a, button, input {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Enhanced reveal active state */
+        .reveal.active {
+            animation: slideInUp 0.6s ease-out forwards;
+        }
+
+        /* Image hover effects */
+        img {
+            transition: filter 0.6s ease;
+        }
+
+        img:hover {
+            filter: brightness(1.1) saturate(1.1);
+        }
+
+        /* Decorative floating elements */
+        @keyframes orbitFloat {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(10px, -10px) rotate(90deg);
+            }
+            50% {
+                transform: translate(0, -20px) rotate(180deg);
+            }
+            75% {
+                transform: translate(-10px, -10px) rotate(270deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+
+        /* Section styling with smooth transitions */
+        section {
+            position: relative;
+            z-index: 1;
+        }
+
+        #gallery, footer {
+            background-color: #ffffff;
+        }
+
+        /* Ripple effect on buttons */
+        button {
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+            pointer-events: none;
+        }
+
+        button:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* Scroll Animation Classes */
+        .scroll-fade-in {
+            opacity: 0;
+            transition: opacity 0.8s ease-out;
+        }
+
+        .scroll-fade-in.scrolled {
+            opacity: 1;
+        }
+
+        .scroll-slide-up {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .scroll-slide-up.scrolled {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .scroll-slide-left {
+            opacity: 0;
+            transform: translateX(-60px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .scroll-slide-left.scrolled {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .scroll-slide-right {
+            opacity: 0;
+            transform: translateX(60px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .scroll-slide-right.scrolled {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .scroll-scale {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .scroll-scale.scrolled {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .scroll-rotate {
+            opacity: 0;
+            transform: rotate(-5deg) scale(0.95);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .scroll-rotate.scrolled {
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
+        }
+
+        /* Stagger delays for scroll animations */
+        .stagger-1 { transition-delay: 0s; }
+        .stagger-2 { transition-delay: 0.1s; }
+        .stagger-3 { transition-delay: 0.2s; }
+        .stagger-4 { transition-delay: 0.3s; }
+        .stagger-5 { transition-delay: 0.4s; }
+
+        /* Parallax effect */
+        .parallax {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .parallax img {
+            transition: transform 0.5s ease-out;
+        }
+
+        /* Smooth text reveal */
+        .text-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .text-reveal.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Number counter animation */
+        .counter {
+            font-size: 2.25rem;
+            font-weight: 700;
+        }
+
+        /* Image reveal with blur effect */
+        .image-reveal {
+            opacity: 0;
+            filter: blur(10px);
+            transition: opacity 0.8s ease-out, filter 0.8s ease-out;
+        }
+
+        .image-reveal.in-view {
+            opacity: 1;
+            filter: blur(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <header class="fixed top-0 left-0 w-full z-50 glass-header border-b border-stone-200">
+        <nav class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="#" class="text-2xl font-bold tracking-tighter text-stone-900">AURA<span class="text-[#c5a68d]">HOME</span></a>
+            
+            <!-- Desktop Links -->
+            <div class="hidden md:flex space-x-8 font-medium">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#gallery" class="nav-link">Portfolio</a>
+                <a href="#about" class="nav-link">Philosophy</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+
+            <!-- Mobile Toggle -->
+            <button id="menu-btn" class="md:hidden text-2xl focus:outline-none">
+                <i class="fa-solid fa-bars-staggered"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-stone-900 z-[60] flex flex-col items-center justify-center translate-x-full">
+        <button id="close-btn" class="absolute top-8 right-8 text-white text-3xl">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="flex flex-col space-y-8 text-center">
+            <a href="#home" class="text-3xl text-white font-light mobile-link">Home</a>
+            <a href="#gallery" class="text-3xl text-white font-light mobile-link">Portfolio</a>
+            <a href="#about" class="text-3xl text-white font-light mobile-link">Philosophy</a>
+            <a href="#contact" class="text-3xl text-white font-light mobile-link">Contact</a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="home" class="pt-32 pb-32 px-6 max-w-7xl mx-auto">
+        <div class="flex flex-col lg:flex-row items-center gap-12">
+            <div class="lg:w-1/2 space-y-6">
+                <span class="inline-block px-4 py-1 border border-stone-300 rounded-full text-xs uppercase tracking-widest text-stone-500 font-semibold">EST. 2024</span>
+                <h1 class="text-5xl md:text-7xl font-bold leading-[1.1] text-stone-900">
+                    Elegance is in the <span class="italic text-stone-400">Simplicity</span>
+                </h1>
+                <p class="text-lg text-stone-600 max-w-md leading-relaxed">
+                    We curate living spaces that balance modern aesthetics with everyday functionality. Transform your home into a sanctuary.
+                </p>
+                <div class="flex gap-4 pt-4">
+                    <button class="bg-stone-900 text-white px-8 py-4 rounded-full font-semibold hover:bg-stone-800 transition-colors shadow-xl shadow-stone-200">
+                        View Projects
+                    </button>
+                    <button class="border border-stone-300 text-stone-900 px-8 py-4 rounded-full font-semibold hover:bg-stone-100 transition-colors">
+                        Our Story
+                    </button>
+                </div>
+            </div>
+            
+            <div class="lg:w-1/2 mt-8 lg:mt-0">
+                <div class="collage-grid">
+                    <div class="collage-item h-48 md:h-64 shadow-xl">
+                        <img src="1.jpg" alt="Design 1" onerror="this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-stone-400 font-bold\'>1.jpeg</div>'">
+                        <div class="collage-overlay-text">Modern Living</div>
+                    </div>
+                    <div class="collage-item h-48 md:h-64 shadow-xl">
+                        <img src="2.jpg" alt="Design 2" onerror="this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-stone-400 font-bold\'>2.jpeg</div>'">
+                        <div class="collage-overlay-text">Minimalist</div>
+                    </div>
+                    <div class="collage-item h-48 md:h-64 shadow-xl">
+                        <img src="3.jpg" alt="Design 3" onerror="this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-stone-400 font-bold\'>3.jpeg</div>'">
+                        <div class="collage-overlay-text">Contemporary</div>
+                    </div>
+                    <div class="collage-item h-48 md:h-64 shadow-xl">
+                        <img src="4.jpg" alt="Design 4" onerror="this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-stone-400 font-bold\'>4.jpeg</div>'">
+                        <div class="collage-overlay-text">Elegant Space</div>
+                    </div>
+                    <div class="collage-item h-48 md:h-64 shadow-xl">
+                        <img src="5.jpg" alt="Design 5" onerror="this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-stone-400 font-bold\'>5.jpeg</div>'">
+                        <div class="collage-overlay-text">Design Showcase</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery / Services -->
+    <section id="gallery" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="reveal text-center mb-16">
+                <h2 class="text-4xl font-bold text-stone-900 mb-4 scroll-slide-up">Curated Design Services</h2>
+                <div class="w-16 h-1 bg-stone-300 mx-auto scroll-scale"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="reveal group scroll-slide-up stagger-1">
+                    <div class="overflow-hidden rounded-2xl mb-6 aspect-square bg-stone-100 image-reveal">
+                        <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Living Room">
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-reveal stagger-2">Residential Styling</h3>
+                    <p class="text-stone-500 text-reveal stagger-3">Bespoke furniture and layout planning for modern apartments and villas.</p>
+                </div>
+                <!-- Service 2 -->
+                <div class="reveal group scroll-slide-up stagger-2" style="transition-delay: 200ms;">
+                    <div class="overflow-hidden rounded-2xl mb-6 aspect-square bg-stone-100 image-reveal">
+                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Workspace">
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-reveal stagger-2">Workspace Design</h3>
+                    <p class="text-stone-500 text-reveal stagger-3">Creating productive environments that inspire creativity and focus.</p>
+                </div>
+                <!-- Service 3 -->
+                <div class="reveal group scroll-slide-up stagger-3" style="transition-delay: 400ms;">
+                    <div class="overflow-hidden rounded-2xl mb-6 aspect-square bg-stone-100 image-reveal">
+                        <img src="https://images.unsplash.com/photo-1556912172-45b7abe8b7e1?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Kitchen">
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-reveal stagger-2">Sustainable Living</h3>
+                    <p class="text-stone-500 text-reveal stagger-3">Eco-friendly materials and energy-efficient designs for the conscious home.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Philosophy -->
+    <section id="about" class="py-24 px-6 bg-[#1a1a1a] text-white">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
+            <div class="md:w-1/2 reveal scroll-slide-left">
+                <div class="rounded-3xl shadow-2xl image-reveal bg-gradient-to-br from-stone-800 to-stone-900 p-16 flex items-center justify-center min-h-[500px]">
+                    <div class="text-center">
+                        <h3 class="text-6xl font-bold text-stone-100 mb-4" style="font-family: 'Playfair Display', serif; letter-spacing: -2px;">Design</h3>
+                        <p class="text-2xl text-stone-300" style="font-family: 'Playfair Display', serif;">Studio Workspace</p>
+                        <div class="mt-8 text-stone-400">
+                            <i class="fas fa-palette text-4xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="md:w-1/2 reveal scroll-slide-right">
+                <h2 class="text-4xl md:text-5xl font-bold mb-8 text-reveal">Crafting homes, not just houses.</h2>
+                <p class="text-stone-400 text-lg leading-relaxed mb-8 text-reveal stagger-1">
+                    Our philosophy is rooted in the belief that your surroundings deeply impact your well-being. We use light, texture, and natural materials to create flow and harmony in every corner.
+                </p>
+                <div class="grid grid-cols-2 gap-8">
+                    <div class="text-reveal stagger-2">
+                        <span class="block text-4xl font-bold text-white mb-2">120+</span>
+                        <span class="text-stone-500 uppercase tracking-widest text-xs">Projects Done</span>
+                    </div>
+                    <div class="text-reveal stagger-3">
+                        <span class="block text-4xl font-bold text-white mb-2">15</span>
+                        <span class="text-stone-500 uppercase tracking-widest text-xs">Design Awards</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-stone-100 pt-24 pb-12 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-4 gap-12 mb-16">
+                <div class="col-span-1 md:col-span-1">
+                    <a href="#" class="text-2xl font-bold tracking-tighter text-stone-900">AURA<span class="text-[#c5a68d]">HOME</span></a>
+                    <p class="mt-4 text-stone-500">Redefining modern living through minimalist soul and architectural precision.</p>
+                    <div class="flex space-x-4 mt-6">
+                        <a href="#" class="text-stone-400 hover:text-stone-900 transition-colors"><i class="fa-brands fa-instagram text-xl"></i></a>
+                        <a href="#" class="text-stone-400 hover:text-stone-900 transition-colors"><i class="fa-brands fa-pinterest text-xl"></i></a>
+                        <a href="#" class="text-stone-400 hover:text-stone-900 transition-colors"><i class="fa-brands fa-behance text-xl"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-6">Explore</h4>
+                    <ul class="space-y-4 text-stone-500">
+                        <li><a href="#" class="hover:text-stone-900">Collections</a></li>
+                        <li><a href="#" class="hover:text-stone-900">Sustainability</a></li>
+                        <li><a href="#" class="hover:text-stone-900">Trade Program</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-6">Contact</h4>
+                    <ul class="space-y-4 text-stone-500">
+                        <li>hello@aurahome.design</li>
+                        <li>+1 (555) 234-5678</li>
+                        <li>88 Design District, NY</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-6">Newsletter</h4>
+                    <p class="text-stone-500 mb-4">Subscribe for interior trends.</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Your email" class="bg-white border-b border-stone-300 py-2 w-full focus:outline-none focus:border-stone-900">
+                        <button class="ml-2 text-stone-900"><i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-12 border-t border-stone-200 text-center text-stone-400 text-sm">
+                &copy; 2024 Aura Home Design Studio. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Reveal Animations
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 150;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+
+        window.addEventListener("scroll", reveal);
+        window.onload = reveal;
+
+        // Scroll Animation Handler using Intersection Observer
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('scrolled');
+                    entry.target.classList.add('in-view');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all scroll animation elements
+        document.addEventListener('DOMContentLoaded', () => {
+            const scrollElements = document.querySelectorAll(
+                '.scroll-fade-in, .scroll-slide-up, .scroll-slide-left, .scroll-slide-right, .scroll-scale, .scroll-rotate, .text-reveal, .image-reveal'
+            );
+            
+            scrollElements.forEach(element => {
+                observer.observe(element);
+            });
+        });
+
+        // Mobile Menu Logic
+        const menuBtn = document.getElementById('menu-btn');
+        const closeBtn = document.getElementById('close-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('translate-x-full');
+        });
+
+        closeBtn.addEventListener('click', () => {
+            mobileMenu.classList.add('translate-x-full');
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('translate-x-full');
+            });
+        });
+
+        // Smooth Scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Parallax effect handler
+        window.addEventListener('scroll', () => {
+            const parallaxElements = document.querySelectorAll('.parallax img');
+            parallaxElements.forEach(element => {
+                const scrollPosition = window.pageYOffset;
+                const elementOffset = element.parentElement.offsetTop;
+                const distance = scrollPosition - elementOffset;
+                element.style.transform = `translateY(${distance * 0.5}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
